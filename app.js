@@ -122,3 +122,54 @@ newBtn.addEventListener("click", () => {
   form.reset();
   statusEl.textContent = "";
 });
+
+/* UI Logic */
+document.addEventListener('DOMContentLoaded', () => {
+  // Mobile Menu Toggle
+  const mobileBtn = document.querySelector('.mobile-menu-btn');
+  const nav = document.querySelector('.nav');
+  const contactBar = document.querySelector('.contact-bar');
+
+  if (mobileBtn) {
+    mobileBtn.addEventListener('click', () => {
+      mobileBtn.classList.toggle('active');
+      nav.classList.toggle('active');
+      contactBar.classList.toggle('active');
+    });
+  }
+
+  // Close menu when clicking a link
+  document.querySelectorAll('.nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (nav.classList.contains('active')) {
+        mobileBtn.classList.remove('active');
+        nav.classList.remove('active');
+        contactBar.classList.remove('active');
+      }
+    });
+  });
+
+  // Scroll Behavior (Hide/Show Topbar)
+  let lastScrollTop = 0;
+  const topbar = document.querySelector('.topbar');
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    // If scrolling down and past 80px, hide. Else show.
+    if (scrollTop > lastScrollTop && scrollTop > 80) {
+      topbar.classList.add('hidden');
+      // Close mobile menu if open
+      if (mobileBtn && mobileBtn.classList.contains('active')) {
+        mobileBtn.classList.remove('active');
+        nav.classList.remove('active');
+        contactBar.classList.remove('active');
+      }
+    } else {
+      topbar.classList.remove('hidden');
+    }
+
+    // Prevent negative scrolling issue
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+  }, { passive: true });
+});
